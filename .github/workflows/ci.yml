@@ -1,5 +1,6 @@
 
-name: CI-test
+name: CI
+
 on:
   push:
     branches:
@@ -32,6 +33,7 @@ jobs:
           path: flaskapp_faraday_bandit.xml
 
 
+
   upload:
     if: ${{ always() }}
     needs: [build]
@@ -53,7 +55,6 @@ jobs:
         name: bandit-report
         path: bandit-report
 
-
 #     Faraday CLI approach
     - name: Upload Reports to Faraday
       run: |
@@ -61,4 +62,7 @@ jobs:
         faraday-cli auth -f ${{ secrets.FARADAY_HOST }} -u ${{ secrets.FARADAY_USERNAME }} -p ${{ secrets.FARADAY_PASSWORD }}
         faraday-cli tool report -w ${{ secrets.FARADAY_WORKSPACE }} /reports/bandit-report/flaskapp_faraday_bandit.xml
         faraday-cli tool report -w ${{ secrets.FARADAY_WORKSPACE }} --tag-vuln ${{ github.event.repository.name }} /reports/zap-report/zap-report.xml
+
+
+
 
